@@ -71,7 +71,7 @@ func main() {
 	mux.Handle("/socket.io/", server)
 	mux.Handle("/", http.FileServer(http.Dir("./public")))
 
-	log.Infof("🚀 Application listening on http://localhost%s", port)
+	log.Infof("🚀 Application listening to http://localhost%s", port)
 
 	err := http.ListenAndServe(port, mux)
 
