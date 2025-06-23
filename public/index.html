@@ -50,7 +50,7 @@
         messageList.scrollTop = messageList.scrollHeight;
       };
 
-      const socket = io('http://localhost:' + window.location.port);
+      const socket = io('https://socket-mobile.test.lskk.co.id');
 
       socket.on('connect', () => {
         console.log('Connected to server!');
