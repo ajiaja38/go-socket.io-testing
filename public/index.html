@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Go Socket.IO Client</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        margin: 20px;
+        background-color: #f4f4f4;
+        color: #333;
+      }
+      h1 {
+        color: #0056b3;
+      }
+      #messages {
+        list-style-type: none;
+        padding: 0;
+        max-height: 400px;
+        overflow-y: auto;
+        border: 1px solid #ccc;
+        background-color: #fff;
+        border-radius: 5px;
+        padding: 10px;
+      }
+      #messages li {
+        padding: 8px 0;
+        border-bottom: 1px solid #eee;
+      }
+      #messages li:last-child {
+        border-bottom: none;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Go Socket.IO Real-time Messages</h1>
+    <ul id="messages">
+      <li>Connecting to server...</li>
+    </ul>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+    <script>
+      const messageList = document.getElementById('messages');
+
+      const addMessage = (msg) => {
+        const li = document.createElement('li');
+        li.textContent = msg;
+        messageList.appendChild(li);
+        messageList.scrollTop = messageList.scrollHeight;
+      };
+
+      const socket = io('http://localhost:' + window.location.port);
+
+      socket.on('connect', () => {
+        console.log('Connected to server!');
+      });
+
+      socket.on('periodic-message', (data) => {
+        const message = data.message;
+        const dateTime = new Date(data.date_time).toLocaleString();
+        addMessage(`[${dateTime}] ${message}`);
+        console.log('Received periodic message:', data);
+      });
+
+      socket.on('disconnect', (reason) => {
+        addMessage(`❌ Disconnected from server: ${reason}`);
+        console.log('Disconnected:', reason);
+      });
+
+      socket.on('connect_error', (error) => {
+        addMessage(`🚫 Connection error: ${error.message}`);
+        console.error('Connection Error:', error);
+      });
+
+      socket.on('reconnect', (attemptNumber) => {
+        addMessage(`🔄 Reconnected after ${attemptNumber} attempts.`);
+        console.log('Reconnected, attempt:', attemptNumber);
+      });
+    </script>
+  </body>
+</html>
