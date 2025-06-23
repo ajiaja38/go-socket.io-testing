@@ -45,7 +45,7 @@ func main() {
 
 	c := cron.New()
 
-	c.AddFunc("@every 10s", func() {
+	c.AddFunc("@every 10m", func() {
 		payload := ResponseEntity{
 			Message:  "Halo dari golang socket io ✅",
 			DateTime: time.Now(),
